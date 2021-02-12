@@ -7,41 +7,45 @@ window.addEventListener("load", function() {
       let copilotNameInput = document.getElementById("copilotName");
       let fuelLevelInput = document.getElementById("fuelLevel");
       let cargoMassInput = document.getElementById("cargoMass");
-      console.log("pilotvalue   " + pilotNameInput.value);
-      console.log("copilotvalue  " + copilotNameInput.value);
-      console.log("fuelvalue" + fuelLevelInput.value);
-      console.log("cargovalue" + cargoMassInput.value);
-
 
       if (pilotNameInput.value === "" || copilotNameInput.value === "" || fuelLevelInput.value === "" || cargoMassInput.value === "") {
          alert("You forgot to enter something");
          event.preventDefault();
       }
-      
+
+      if (isNaN(Number(fuelLevelInput.value)) || isNaN(Number(cargoMassInput.value))) {
+         alert("Fuel Level and Cargo Mass need to be numbers");
+         event.preventDefault();
+      }
+
       let pilotStatus = document.getElementById("pilotStatus");
       let copilotStatus = document.getElementById("copilotStatus");
       let fuelStatus = document.getElementById("fuelStatus")
       let cargoStatus = document.getElementById("cargoStatus")
       let faultyItems = document.getElementById("faultyItems")
       let launchStatus = document.getElementById("launchStatus");
+
       pilotStatus.innerHTML = `Pilot ${pilotNameInput.value} is ready for launch`
       copilotStatus.innerHTML = `Co-pilot ${copilotNameInput.value} is ready for launch`
+
       if (fuelLevelInput.value < 10000) {
-         console.log("uh on not enout fuel")
          faultyItems.style.visibility = "visible";
          fuelStatus.innerHTML = "There is not enough fuel for the journey"
          launchStatus.innerHTML = "Shuttle not ready for launch"
          launchStatus.style.color = "red";
+         event.preventDefault();
       }
       if (cargoMassInput.value > 10000) {
-         console.log("you're too fat")
          faultyItems.style.visibility = "visible";
          cargoStatus.innerHTML = "There is too much mass for the shuttle to take off"
          launchStatus.innerHTML = "Shuttle not ready for launch"
          launchStatus.style.color = "red";
-      }
-
+         event.preventDefault();
+      }      
       
+      launchStatus.innerHTML = "Shuttle ready for launch"
+      launchStatus.style.color = "green";      
+
    });
    fetch("https://handlers.education.launchcode.org/static/planets.json").then(function(response){
       response.json().then(function(json) {
